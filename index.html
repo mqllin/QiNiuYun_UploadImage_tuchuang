@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>雨林图床</title>
+    <link rel="shortcut icon " type="images/x-icon" href="favicon.ico">
+    <link rel="stylesheet" type="text/css" href="http://unpkg.com/view-design/dist/styles/iview.css">
+    <script type="text/javascript" src="http://vuejs.org/js/vue.min.js"></script>
+    <script type="text/javascript" src="http://unpkg.com/view-design/dist/iview.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/qiniu-js@2.5.5/dist/qiniu.min.js"></script>
+</head>
+
+<body>
+<div id="app" i-col="24">
+    <p class="title">雨林图床 Powered by 七牛云</p>
+
+    <div class="upload-borad">
+        <div class="demo-spin-container" v-show="loading">
+            <Spin fix></Spin>
+        </div>
+
+        <Upload
+                class="Upload"
+                multiple="true"
+                :show-upload-list="showUploadList"
+                type="drag"
+                :before-upload="beforeUpload"
+                :on-progress="onProgress"
+                :on-success="onSuccess"
+                :on-error="onError"
+                :data="{token: token}"
+                action="https://upload-z2.qiniup.com">
+            <div style="padding: 20px 0">
+                <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                <p>点击选择文件或者将文件拖入此处</p>
+            </div>
+        </Upload>
+
+        <ul class="ivu-upload-list">
+            <li class="ivu-upload-list-file ivu-upload-list-file-finish" v-for="item in arry" >
+                <span @click="copyURL(item)"><i class="ivu-icon ivu-icon-ios-image"></i>{{item}}</span>
+                <i class="ivu-icon ivu-icon-ios-close ivu-upload-list-remove"></i>
+            </li>
+        </ul>
+    </div>
+
+    <p class="footer">本图床为自用图床，资源可能随时清除。</p>
+
+
+</div>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            visible: false,
+            domain:'',
+            token:'',
+            loading:true,
+            showUploadList:false,
+            arry:[]
+
+        },
+        mounted(){
+            this.init()
+        },
+        methods: {
+            init:function(){
+                let that= this
+                axios.get('/server/upload.php')
+                    .then(function (res) {
+                        that.token = res.data.up_token
+                        that.domain = res.data.domain
+                        that.$Notice.success({
+                            title: '初始化成功',
+                            desc: ''
+                        });
+                        that.loading = false
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+            },
+            show: function () {
+                this.visible = true;
+            },
+            beforeUpload:function(file){
+                // console.log('file',file)
+                return file.name='/tuchuang/'+file.name
+            },
+            onProgress:function (event, file, fileList) {
+                // console.log(event, file, fileList)
+            },
+            onSuccess:function (response, file, fileList) {
+                // console.log('上传成功',response, file, fileList)
+                this.$Notice.success({
+                    title: '上传成功',
+                    desc: ''
+                });
+                this.arry.push('http://'+this.domain+'/'+response.key)
+            },
+            onError:function ( error, file, fileList) {
+                // console.log('上传失败',error, file, fileList)
+                this.$Notice.error({
+                    title: '上传失败',
+                    desc:error
+                });
+            },
+            copyURL:function (e) {
+                // console.log(e)
+            }
+        }
+    })
+</script>
+<style>
+    #app{
+        width: 100%;
+        text-align: center;
+        padding: 28px;
+        box-sizing: border-box;
+        margin: auto 0;
+
+    }
+    .title{
+        font-size: 24px;
+        margin-top: 28px;
+        margin-bottom: 28px;
+
+    }
+    .upload-borad{
+        width: 600px;
+        margin: 0 auto;
+        position: relative;
+    }
+    .Upload{
+        width:100%;
+    }
+    .ivu-upload-list{
+        width:100%;
+
+
+    }
+    .ivu-icon{
+        margin-right: 5px;
+    }
+    .footer {
+        font-size: 12pt;
+        color: #9ea7b4;
+        position: fixed;
+        bottom: 0px;
+        line-height: 30px;
+        height: 30px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .demo-spin-container{
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        border: 1px solid #eee;
+        z-index: 2000;
+
+    }
+
+</style>
+</body>
+</html>
