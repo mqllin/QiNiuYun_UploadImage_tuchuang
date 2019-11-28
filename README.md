@@ -13,6 +13,4 @@
 对PHP版本没有要求
 浏览器IE9以上
 
-[浏览Demo][1]
-
-[1]http://tuchuang.mqllin.cn
+浏览Demo:http://tuchuang.mqllin.cn
