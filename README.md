@@ -12,3 +12,7 @@
 修改server/config.php配置文件中的4个变量即可，无需修改其他代码即可使用。
 对PHP版本没有要求
 浏览器IE9以上
+
+[浏览Demo][1]
+
+[1]http://tuchuang.mqllin.cn
