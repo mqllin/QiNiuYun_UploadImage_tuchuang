@@ -5,7 +5,7 @@
     <title>雨林图床</title>
     <link rel="shortcut icon " type="images/x-icon" href="favicon.ico">
     <link rel="stylesheet" type="text/css" href="http://unpkg.com/view-design/dist/styles/iview.css">
-    <script type="text/javascript" src="http://vuejs.org/js/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
     <script type="text/javascript" src="http://unpkg.com/view-design/dist/iview.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script type="text/javascript" src="https://unpkg.com/qiniu-js@2.5.5/dist/qiniu.min.js"></script>
@@ -14,7 +14,7 @@
 <body>
 <div id="app" i-col="24">
     <p class="title">雨林图床 Powered by 七牛云</p>
-
+    
     <div class="upload-borad">
         <div class="demo-spin-container" v-show="loading">
             <Spin fix></Spin>
@@ -50,6 +50,7 @@
 
 </div>
 <script>
+   
     new Vue({
         el: '#app',
         data: {
